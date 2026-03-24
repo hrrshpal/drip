@@ -5,11 +5,11 @@ import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
-  const {products} = useContext(ShopContext);
+  const {products, search, showSearch} = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([])
   const [category, setCategory] = useState([])
-  const [Subcategory, setSubcategory] = useState([])
+  const [subCategory, setSubCategory] = useState([])
   const [sortType, setSortType] = useState('relavant')
 
   const toggleCategory = (e) => {
@@ -20,22 +20,26 @@ const Collection = () => {
     }
   }
 
-  const toggleSubcategory = (e) =>{
-    if(Subcategory.includes(e.target.value)){
-      setSubcategory(prev => prev.filter(item => item !== e.target.value))
+  const toggleSubCategory = (e) =>{
+    if(subCategory.includes(e.target.value)){
+      setSubCategory(prev => prev.filter(item => item !== e.target.value))
     } else {
-      setSubcategory(prev => [...prev, e.target.value])
+      setSubCategory(prev => [...prev, e.target.value])
     }
   }
 
   const applyFilter = () => {
     let productsCopy = products.slice()
+
+    if(showSearch && search){
+      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    }
     if(category.length > 0){
       productsCopy = productsCopy.filter(item => category.includes(item.category))
     }
 
-    if(Subcategory.length > 0){
-      productsCopy = productsCopy.filter(item => Subcategory.includes(item.Subcategory))
+    if(subCategory.length > 0){
+      productsCopy = productsCopy.filter(item => subCategory.includes(item.subCategory))
     }
 
     setFilterProducts(productsCopy)
@@ -55,7 +59,7 @@ const Collection = () => {
 
   useEffect(()=>{
     applyFilter();
-  },[category, Subcategory])
+  },[category, subCategory, search, showSearch])
 
   useEffect(()=>{
     sortProduct();
@@ -93,13 +97,13 @@ const Collection = () => {
           <p className='mb-3 text-sm font-medium'>TYPE</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3'value={'Topwear'} onChange={toggleSubcategory} /> Topwear
+              <input type="checkbox" className='w-3'value={'Topwear'} onChange={toggleSubCategory} /> Topwear
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3'value={'Bottomwear'} onChange={toggleSubcategory} /> Bottomwear
+              <input type="checkbox" className='w-3'value={'Bottomwear'} onChange={toggleSubCategory} /> Bottomwear
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3'value={'Winterwear'} onChange={toggleSubcategory} /> Winterwear
+              <input type="checkbox" className='w-3'value={'Winterwear'} onChange={toggleSubCategory} /> Winterwear
             </p>
           </div>
         </div>
