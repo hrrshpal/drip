@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { backendUrl } from "../App";
+import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
-import { assets } from "../assets/admin_assets/assets";
+import { assets } from '../assets/admin_assets/assets';
 
 const Orders = ({ token }) => {
   const [orders, setOrders] = useState([]);
@@ -13,13 +13,9 @@ const Orders = ({ token }) => {
     try {
       const response = await axios.post(
         backendUrl + "/api/order/list",
-        {},
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+        {}, {headers: {token,}}
       );
+      
       if (response.data.success) {
         setOrders(response.data.orders);
       } else {
@@ -32,25 +28,12 @@ const Orders = ({ token }) => {
   };
 
   const statusHandler = async (event, orderId) => {
-    const newStatus = event.target.value;
-
-    // Only send update request if status has actually changed
-    if (newStatus === order.status) {
-      return; // Don't send request if status is unchanged
-    }
 
     try {
       const response = await axios.post(
         backendUrl + "/api/order/status",
-        {
-          orderId,
-          status: newStatus,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
+        {orderId, status: event.target.value},
+        {headers: {token}}
       );
       if (response.data.success) {
         await fetchAllOrders(); // Refresh orders after status update
@@ -103,7 +86,9 @@ const Orders = ({ token }) => {
                   ", " +
                   order.address.state +
                   ", " +
-                  order.address.pincode}
+                  order.address.country +
+                  ", " +
+                  order.address.zipcode}
               </p>
             </div>
             <p>{order.address.phone}</p>
