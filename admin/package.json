@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -14,7 +14,7 @@
     "axios": "^1.13.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.1",
+    "react-router-dom": "^7.13.2",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.2.2"
   },
